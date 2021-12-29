@@ -5,11 +5,15 @@ const tz = require('moment-timezone');
 const chalk = require('chalk');
 const { Client, Intents } = require('discord.js');
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 3001;
 
 const { TIMEZONE, FORMAT, CHANNEL_ID, UPDATE_INTERVAL, BOT_TOKEN} = process.env;
 
-//'ready' event
-client.once('ready', () => {
+app.get("/", (req, res) => res.send("안녕하세요!"));
+app.get("/update", async (req, res) => {
+  await client.login(BOT_TOKEN);
   //init time
   const timeNow = moment().tz(TIMEZONE).format(FORMAT);
   //define clockChannel
@@ -17,15 +21,9 @@ client.once('ready', () => {
   //initial update
   clockChannel.edit({ name: `🕒 ${timeNow}` }, 'Clock update')
     .catch(console.error);
-  //set the interval
-  setInterval(() => {
-    const timeNowUpdate = moment().tz(TIMEZONE).format(FORMAT);
-    clockChannel.edit({ name: `🕒 ${timeNowUpdate}` }, 'Clock update')
-      .catch(console.error);
-  }, UPDATE_INTERVAL);
   //tells if it is ready
-	console.log(chalk.greenBright("[READY]"), `Logged in as ${client.user.tag} (${client.user.id}) at ${moment().format("DD MMMM YYYY, HH:mm:ss")}`);
+  console.log(chalk.greenBright("[READY]"), `Logged in as ${client.user.tag} (${client.user.id}) at ${moment().format("DD MMMM YYYY, HH:mm:ss")}`);
+  res.send("success");
 });
 
-//log in
-client.login(BOT_TOKEN);
+app.listen(port, () => console.log(`app listening on port ${port}!`));
