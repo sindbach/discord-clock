@@ -14,10 +14,10 @@ const { TIMEZONE, FORMAT, CHANNEL_ID, UPDATE_INTERVAL, BOT_TOKEN} = process.env;
 app.get("/", (req, res) => res.send("안녕하세요!"));
 app.get("/update", async (req, res) => {
   await client.login(BOT_TOKEN);
+  //define clockChannel
+  const clockChannel = await client.channels.cache.get(CHANNEL_ID);
   //init time
   const timeNow = moment().tz(TIMEZONE).format(FORMAT);
-  //define clockChannel
-  const clockChannel = client.channels.cache.get(CHANNEL_ID);
   //initial update
   clockChannel.edit({ name: `🕒 ${timeNow}` }, 'Clock update')
     .catch(console.error);
