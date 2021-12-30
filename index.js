@@ -27,5 +27,5 @@ client.once('ready', () => {
 	console.log(chalk.greenBright("[READY]"), `Logged in as ${client.user.tag} (${client.user.id}) at ${moment().format("DD MMMM YYYY, HH:mm:ss")}`);
 });
 
-//log in
+//login
 client.login(BOT_TOKEN);
